@@ -56,6 +56,7 @@ static const char *params[] = {
 "-strict",
 "-nogui",
 "-monster_tourney",
+"-singletics",
 };
 
 static const char *params_with_args[] = {

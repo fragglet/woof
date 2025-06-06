@@ -2623,6 +2623,11 @@ void D_DoomMain(void)
       singledemo = true; // quit after one demo
   }
 
+  if (M_CheckParm("-singletics"))
+  {
+    singletics = true;
+  }
+
   //!
   // @arg <demo>
   // @category demo
