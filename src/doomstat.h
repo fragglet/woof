@@ -196,6 +196,9 @@ extern  struct mapentry_s *gamemapinfo;
 // If non-zero, exit the level after this number of minutes
 extern  int             timelimit;
 
+// If true, the game exits once all monsters of one faction are dead.
+extern boolean          monster_tourney;
+
 // Nightmare mode flag, single player.
 extern  boolean         respawnmonsters;
 

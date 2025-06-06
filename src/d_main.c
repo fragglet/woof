@@ -2198,6 +2198,12 @@ void D_DoomMain(void)
       I_Printf(VB_INFO, "Levels will end after %d minute%s.", timelimit, timelimit>1 ? "s" : "");
     }
 
+  monster_tourney = M_CheckParm("-monster_tourney") > 0;
+  if (monster_tourney)
+  {
+    I_Printf(VB_INFO, "MONSTER_TOURNEY: Levels will end when all monsters on one side are dead.");
+  }
+
   //!
   // @category net
   // @vanilla

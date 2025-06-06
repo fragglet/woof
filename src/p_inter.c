@@ -23,9 +23,11 @@
 #include "d_deh.h" // Ty 03/22/98 - externalized strings
 #include "d_items.h"
 #include "d_player.h"
+#include "d_quit.h"
 #include "d_think.h"
 #include "doomdef.h"
 #include "doomstat.h"
+#include "i_printf.h"
 #include "i_system.h"
 #include "info.h"
 #include "m_fixed.h"
@@ -671,6 +673,44 @@ static void WatchKill(player_t* player, mobj_t* target)
   }
 }
 
+// For "monster tournament mode", check if all monsters of a particular
+// faction (friendly or enemy) have been killed, and if so, end the game.
+static void CheckTournamentEnd(void)
+{
+  thinker_t *p;
+  mobj_t *m;
+  int friend_hp = 0, enemy_hp = 0;
+
+  // Count up total health points remaining for both sides.
+  for (p = thinkercap.next; p != &thinkercap; p = p->next)
+  {
+    if (p->function.p1 != (actionf_p1) P_MobjThinker)
+    {
+      continue;
+    }
+    m = (mobj_t *) p;
+    // Only monsters (MF_COUNTKILL) that are not dead (MF_CORPSE):
+    if ((m->flags & (MF_COUNTKILL|MF_CORPSE)) == MF_COUNTKILL)
+    {
+      if (m->flags & MF_FRIEND)
+      {
+        friend_hp += m->health;
+      }
+      else
+      {
+        enemy_hp += m->health;
+      }
+    }
+  }
+
+  if (friend_hp == 0 || enemy_hp ==0)
+  {
+    I_Printf(VB_INFO, "MONSTER_TOURNEY: friend_hp=%d, enemy_hp=%d\n",
+             friend_hp, enemy_hp);
+    exit(0);
+  }
+}
+
 static void P_KillMobj(mobj_t *source, mobj_t *target, method_t mod)
 {
   mobjtype_t item;
@@ -762,6 +802,11 @@ static void P_KillMobj(mobj_t *source, mobj_t *target, method_t mod)
     P_SetMobjState (target, target->info->xdeathstate);
   else
     P_SetMobjState (target, target->info->deathstate);
+
+  if (monster_tourney)
+  {
+    CheckTournamentEnd();
+  }
 
   target->tics -= P_Random(pr_killtics)&3;
 

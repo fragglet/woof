@@ -121,6 +121,7 @@ mapentry_t*     gamemapinfo;
 
 // If non-zero, exit the level after this number of minutes.
 int             timelimit;
+boolean         monster_tourney;
 
 int             paused;
 boolean         sendpause;     // send a pause event next tic
