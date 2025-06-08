@@ -818,6 +818,12 @@ static boolean P_LookForPlayers(mobj_t *actor, boolean allaround)
   int stop, stopc, c;
   boolean unseen[MAXPLAYERS] = {0};
 
+  // In tournament mode, monsters only fight other monsters.
+  if (monster_tourney)
+  {
+      return false;
+  }
+
   if (actor->flags & MF_FRIEND)
     {  // killough 9/9/98: friendly monsters go about players differently
       int anyone;
