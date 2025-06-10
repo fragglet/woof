@@ -689,8 +689,10 @@ static void CheckTournamentEnd(void)
       continue;
     }
     m = (mobj_t *) p;
-    // Only monsters (MF_COUNTKILL) that are not dead (MF_CORPSE):
-    if ((m->flags & (MF_COUNTKILL|MF_CORPSE)) == MF_COUNTKILL)
+    // Only monsters (MF_COUNTKILL) that are not dead (MF_CORPSE). Lost
+    // Souls are special-cased because they do not have the MF_COUNTKILL flag.
+    if (!(m->flags & MF_CORPSE)
+     && ((m->flags & MF_COUNTKILL) || m->type == MT_SKULL))
     {
       if (m->flags & MF_FRIEND)
       {
